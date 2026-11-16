@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mera Kaam — To-do List</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: "Segoe UI", sans-serif;
+      color: #172033;
+      background: #f4f6fb;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      padding: 48px 20px;
+      background:
+        radial-gradient(ellipse at 12% 8%, #dce8ff 0, transparent 34%),
+        radial-gradient(ellipse at 92% 90%, #e8defc 0, transparent 32%),
+        #f4f6fb;
+    }
+
+    .app {
+      width: min(100%, 620px);
+      margin: 0 auto;
+      padding: 36px;
+      border: 1px solid #e8ebf3;
+      border-radius: 24px;
+      background: #fff;
+      box-shadow: 0 24px 70px #27345b16;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: #6654d9;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 6vw, 2.7rem);
+      letter-spacing: -0.05em;
+    }
+
+    .subtitle {
+      margin: 10px 0 28px;
+      color: #737c91;
+      line-height: 1.6;
+    }
+
+    form {
+      display: flex;
+      gap: 10px;
+    }
+
+    input {
+      min-width: 0;
+      flex: 1;
+      padding: 14px 16px;
+      border: 1px solid #e1e5ef;
+      border-radius: 12px;
+      outline: none;
+      font: inherit;
+    }
+
+    input:focus {
+      border-color: #7664e8;
+      box-shadow: 0 0 0 3px #7664e81c;
+    }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      font: inherit;
+      font-weight: 650;
+      cursor: pointer;
+    }
+
+    .add-button {
+      padding: 0 20px;
+      color: #fff;
+      background: #6654d9;
+    }
+
+    .add-button:hover {
+      background: #5543c8;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 24px 0 12px;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .filter {
+      padding: 8px 11px;
+      color: #737c91;
+      background: transparent;
+    }
+
+    .filter[aria-pressed="true"] {
+      color: #5543c8;
+      background: #f0edff;
+    }
+
+    .count {
+      flex: 0 0 auto;
+      color: #737c91;
+      font-size: 0.88rem;
+    }
+
+    ul {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .task {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid #edf0f5;
+      border-radius: 14px;
+    }
+
+    .task input {
+      width: 19px;
+      height: 19px;
+      flex: 0 0 auto;
+      accent-color: #6654d9;
+      cursor: pointer;
+    }
+
+    .task-title {
+      min-width: 0;
+      flex: 1;
+      overflow-wrap: anywhere;
+    }
+
+    .task.done .task-title {
+      color: #9aa1af;
+      text-decoration: line-through;
+    }
+
+    .delete-button {
+      padding: 8px 10px;
+      color: #9b5360;
+      background: #fff1f2;
+    }
+
+    .delete-button:hover {
+      background: #ffe3e6;
+    }
+
+    .empty {
+      padding: 26px 12px;
+      color: #8a92a4;
+      text-align: center;
+    }
+
+    .clear-button {
+      margin-top: 16px;
+      padding: 8px 0;
+      color: #737c91;
+      background: transparent;
+    }
+
+    .clear-button:hover {
+      color: #5543c8;
+    }
+
+    @media (max-width: 520px) {
+      body {
+        padding: 20px 12px;
+      }
+
+      .app {
+        padding: 24px 18px;
+        border-radius: 18px;
+      }
+
+      .toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .add-button {
+        padding: 0 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <p class="eyebrow">Aaj ka plan</p>
+    <h1>Mera Kaam</h1>
+    <p class="subtitle">Chhote kadam, bade kaam. Apne zaroori tasks yahan likhiye.</p>
+
+    <form id="task-form">
+      <input id="task-input" type="text" placeholder="Naya task likhein..." maxlength="160" autocomplete="off" aria-label="Naya task">
+      <button class="add-button" type="submit">Jodein +</button>
+    </form>
+
+    <section class="toolbar" aria-label="Task filters">
+      <div class="filters">
+        <button class="filter" type="button" data-filter="all" aria-pressed="true">Sabhi</button>
+        <button class="filter" type="button" data-filter="active" aria-pressed="false">Baaki</button>
+        <button class="filter" type="button" data-filter="done" aria-pressed="false">Poore</button>
+      </div>
+      <span class="count" id="task-count" aria-live="polite"></span>
+    </section>
+
+    <ul id="task-list"></ul>
+    <button class="clear-button" id="clear-completed" type="button">Poore hue tasks hataayein</button>
+  </main>
+
+  <script>
+    const storageKey = "mera-kaam-tasks";
+    const form = document.querySelector("#task-form");
+    const input = document.querySelector("#task-input");
+    const list = document.querySelector("#task-list");
+    const count = document.querySelector("#task-count");
+    const filters = document.querySelector(".filters");
+    const clearButton = document.querySelector("#clear-completed");
+    let activeFilter = "all";
+    let tasks = JSON.parse(localStorage.getItem(storageKey) || "[]");
+
+    function saveTasks() {
+      localStorage.setItem(storageKey, JSON.stringify(tasks));
+    }
+
+    function renderTasks() {
+      list.replaceChildren();
+      const visibleTasks = tasks.filter((task) => {
+        if (activeFilter === "active") return !task.done;
+        if (activeFilter === "done") return task.done;
+        return true;
+      });
+
+      count.textContent = `${tasks.filter((task) => !task.done).length} task baaki`;
+
+      if (visibleTasks.length === 0) {
+        const empty = document.createElement("li");
+        empty.className = "empty";
+        empty.textContent = tasks.length ? "Is filter mein koi task nahi hai." : "Abhi koi task nahi — pehla task jodiye!";
+        list.append(empty);
+        return;
+      }
+
+      visibleTasks.forEach((task) => {
+        const item = document.createElement("li");
+        item.className = `task${task.done ? " done" : ""}`;
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = task.done;
+        checkbox.setAttribute("aria-label", `${task.title} ko ${task.done ? "adhura" : "poora"} mark karein`);
+        checkbox.addEventListener("change", () => {
+          task.done = checkbox.checked;
+          saveTasks();
+          renderTasks();
+        });
+
+        const title = document.createElement("span");
+        title.className = "task-title";
+        title.textContent = task.title;
+
+        const deleteButton = document.createElement("button");
+        deleteButton.className = "delete-button";
+        deleteButton.type = "button";
+        deleteButton.textContent = "Hataayein";
+        deleteButton.setAttribute("aria-label", `${task.title} hataayein`);
+        deleteButton.addEventListener("click", () => {
+          tasks = tasks.filter((entry) => entry.id !== task.id);
+          saveTasks();
+          renderTasks();
+        });
+
+        item.append(checkbox, title, deleteButton);
+        list.append(item);
+      });
+    }
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const title = input.value.trim();
+      if (!title) {
+        input.focus();
+        return;
+      }
+
+      tasks.unshift({ id: crypto.randomUUID(), title, done: false });
+      saveTasks();
+      input.value = "";
+      activeFilter = "all";
+      filters.querySelectorAll(".filter").forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.filter === activeFilter));
+      });
+      renderTasks();
+      input.focus();
+    });
+
+    filters.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-filter]");
+      if (!button) return;
+      activeFilter = button.dataset.filter;
+      filters.querySelectorAll(".filter").forEach((filterButton) => {
+        filterButton.setAttribute("aria-pressed", String(filterButton === button));
+      });
+      renderTasks();
+    });
+
+    clearButton.addEventListener("click", () => {
+      tasks = tasks.filter((task) => !task.done);
+      saveTasks();
+      renderTasks();
+    });
+
+    renderTasks();
+  </script>
+</body>
+</html>
