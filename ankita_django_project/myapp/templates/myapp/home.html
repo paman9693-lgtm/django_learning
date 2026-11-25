@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | Ankita</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <nav class="navbar">
+        <a class="brand" href="{% url 'home' %}">Ankita<span>.</span></a>
+        <button class="menu-btn" aria-label="Toggle menu" aria-expanded="false">☰</button>
+        <div class="nav-links">
+            <a class="active" href="{% url 'home' %}">Home</a>
+            <a href="{% url 'about' %}">About</a>
+            <a href="{% url 'contact' %}">Contact</a>
+        </div>
+    </nav>
+
+    <main class="hero">
+        <div class="hero-content">
+            <p class="eyebrow">Welcome to my website</p>
+            <h1>Creative ideas.<br><span>Beautiful results.</span></h1>
+            <p class="subtitle">I create thoughtful, modern digital experiences that are simple, useful and memorable.</p>
+            <div class="actions">
+                <a class="btn primary" href="{% url 'about' %}">About me</a>
+                <a class="btn secondary" href="{% url 'contact' %}">Let's talk</a>
+            </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+            <div class="shape shape-one"></div>
+            <div class="shape shape-two"></div>
+            <div class="portrait-card">A</div>
+        </div>
+    </main>
+    {% if show_welcome %}
+        <script>alert("Welcome! Age verified successfully.");</script>
+    {% endif %}
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

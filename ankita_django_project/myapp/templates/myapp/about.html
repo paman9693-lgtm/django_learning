@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | Ankita</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <nav class="navbar">
+        <a class="brand" href="{% url 'home' %}">Ankita<span>.</span></a>
+        <button class="menu-btn" aria-label="Toggle menu" aria-expanded="false">☰</button>
+        <div class="nav-links">
+            <a href="{% url 'home' %}">Home</a>
+            <a class="active" href="{% url 'about' %}">About</a>
+            <a href="{% url 'contact' %}">Contact</a>
+        </div>
+    </nav>
+
+    <main class="inner-page">
+        <header class="page-heading">
+            <p class="eyebrow">Get to know me</p>
+            <h1>About <span>Me</span></h1>
+        </header>
+        <section class="about-grid">
+            <div class="about-card highlight-card">
+                <span class="card-number">01</span>
+                <h2>Who I am</h2>
+                <p>I am a passionate creator who loves turning ideas into clean, accessible and engaging experiences.</p>
+            </div>
+            <div class="about-card">
+                <span class="card-number">02</span>
+                <h2>What I do</h2>
+                <p>I design and build modern websites with strong attention to detail, usability and visual quality.</p>
+            </div>
+            <div class="about-card">
+                <span class="card-number">03</span>
+                <h2>My goal</h2>
+                <p>To create useful digital work that solves real problems and leaves a positive impression.</p>
+            </div>
+        </section>
+    </main>cd "C:\Users\lenovo\OneDrive\Desktop\ankita project\my_ankitaproject"
+
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
